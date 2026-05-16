@@ -4,224 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style.css">
-    <link rel="icon" type="/images/x-icon" href="color-wheel-guide-isolated-on-transparent-vector-48630416.webp">
-    <title>ColorMe Login</title>
-    <style>
-
-        .error-message {
-            color: #d32f2f;
-            font-size: 13px;
-            margin-top: 5px;
-            display: none;
-            text-align: left;
-        }
-        
-        .pending-results {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .pending-results h4 {
-            margin: 0 0 10px 0;
-            font-size: 16px;
-        }
-
-        .pending-results p {
-            margin: 5px 0;
-            font-size: 14px;
-        }
-
-        .success-message {
-            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            display: none;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-            font-weight: 500;
-        }
-
-        .error-message {
-            background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
-            font-weight: 500;
-        }
-
-        .error-message p {
-            margin: 0;
-        }
-
-        /* Login Button Styling */
-        button[type="submit"] {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        button[type="submit"]:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        button[type="submit"]:active:not(:disabled) {
-            transform: translateY(0);
-        }
-
-        button[type="submit"]:disabled {
-            background: linear-gradient(135deg, #ccc 0%, #999 100%);
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Links Container */
-        .links-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
-            padding: 0 20px 10px 20px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .link-item {
-            text-align: center;
-            font-size: 14px;
-            margin: 0;
-        }
-
-        .link-item p {
-            display: inline;
-            margin: 0;
-            color: #666;
-        }
-
-        /* Signup Link */
-        .signup-link {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            padding: 10px 20px;
-            border: 2px solid #667eea;
-            border-radius: 8px;
-            display: inline-block;
-            transition: all 0.3s ease;
-            margin-left: 8px;
-        }
-
-        .signup-link:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-
-        /* Back to Home Link */
-        .home-link {
-            color: #764ba2;
-            text-decoration: none;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            background: rgba(118, 75, 162, 0.08);
-            border: 1px solid rgba(118, 75, 162, 0.2);
-        }
-
-        .home-link:hover {
-            background: rgba(118, 75, 162, 0.15);
-            border-color: rgba(118, 75, 162, 0.3);
-            transform: translateX(-3px);
-        }
-
-        .home-link::before {
-            content: "←";
-            font-size: 18px;
-            transition: transform 0.3s ease;
-        }
-
-        .home-link:hover::before {
-            transform: translateX(-3px);
-        }
-
-        /* Ensure wrapper contains everything */
-        form {
-            width: 100%;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        .sec-pg-login-container {
-            width: 100%;
-        }
-    </style>
+    <link rel="icon" type="image/x-icon" href="/images/color-wheel-guide-isolated-on-transparent-vector-48630416.webp">
+    <title>Log in — ColorMe</title>
 </head>
 <body class="center-login">
+    <div class="page-bg" aria-hidden="true"></div>
 
-    <div class="wrapper" style="background-color: bisque; height: auto; min-height: 45vh;">
-        <br>
-        <h1>ColorMe Login</h1>
+    <div class="auth-card">
+        <h1>Welcome back</h1>
+        <p class="auth-subtitle">Log in to save your color analysis and view your dashboard.</p>
 
-        <!-- Display pending results if they exist -->
         <div id="pending-results-display" class="pending-results">
-            <h4>✨ Your Analysis Results Will Be Saved:</h4>
+            <h4>Your analysis will be saved</h4>
             <p id="pending-season"></p>
             <p id="pending-undertone"></p>
         </div>
 
-        <!-- Success message -->
         <div id="success-message" class="success-message"></div>
-
-        <!-- Error message -->
         <div id="error-message" class="error-message" style="display: none;">
             <p>Incorrect username or password.</p>
         </div>
 
         <form id="loginForm">
             <div class="sec-pg-login-container">
-                <div class="username-style">
-                    <input type="text" id="fname" name="username" placeholder="Username" required>
+                <div class="form-group">
+                    <input type="text" id="fname" name="username" placeholder="Username" required autocomplete="username">
                 </div>
-                <div class="password-style">
-                    <input type="password" id="lname" name="password" placeholder="Password" required>
+                <div class="form-group">
+                    <input type="password" id="lname" name="password" placeholder="Password" required autocomplete="current-password">
                 </div>
-                <button type="submit" id="login-btn">Login</button>
+                <button type="submit" id="login-btn">Log in</button>
             </div>
-            
+
             <div class="links-container">
                 <div class="link-item">
-                    <p style="display: inline; color: #666;">Don't have an account? </p>
-                    <a href="signup.html" class="signup-link">Sign Up</a>
+                    <p>Don't have an account?</p>
+                    <a href="signup.html" class="signup-link">Sign up</a>
                 </div>
                 <div class="link-item">
-                    <a href="index.html" class="home-link">Back to Home</a>
+                    <a href="index.html" class="home-link">Back to home</a>
                 </div>
             </div>
         </form>
@@ -231,21 +52,16 @@
         const BACKEND_URL = "http://127.0.0.1:5001";
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Check for URL parameters
             const params = new URLSearchParams(window.location.search);
-            
-            // Show error if login failed
+
             if (params.has('error')) {
-                const errorMessage = document.getElementById('error-message');
-                errorMessage.style.display = 'block';
+                document.getElementById('error-message').style.display = 'block';
             }
 
-            // Check for pending results
             const pendingResults = sessionStorage.getItem('pendingResults');
             if (pendingResults) {
                 try {
-                    const results = JSON.parse(pendingResults);
-                    displayPendingResults(results);
+                    displayPendingResults(JSON.parse(pendingResults));
                 } catch (error) {
                     console.error('Error parsing pending results:', error);
                 }
@@ -253,17 +69,11 @@
         });
 
         function displayPendingResults(results) {
-            const displayDiv = document.getElementById('pending-results-display');
-            const seasonP = document.getElementById('pending-season');
-            const undertoneP = document.getElementById('pending-undertone');
-
-            seasonP.textContent = `🌸 Season: ${results.season}`;
-            undertoneP.textContent = `🎨 Undertone: ${results.undertone}`;
-
-            displayDiv.style.display = 'block';
+            document.getElementById('pending-results-display').style.display = 'block';
+            document.getElementById('pending-season').textContent = `Season: ${results.season}`;
+            document.getElementById('pending-undertone').textContent = `Undertone: ${results.undertone}`;
         }
 
-        // Handle form submission
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -271,85 +81,51 @@
             const errorMessage = document.getElementById('error-message');
             const successMessage = document.getElementById('success-message');
 
-            // Hide previous messages
             errorMessage.style.display = 'none';
             successMessage.style.display = 'none';
-
-            // Disable button
             loginBtn.disabled = true;
-            loginBtn.textContent = 'Logging in...';
+            loginBtn.textContent = 'Logging in…';
 
-            // Get form data
             const username = document.getElementById('fname').value;
             const password = document.getElementById('lname').value;
 
-            // Get pending results from sessionStorage
             const pendingResults = sessionStorage.getItem('pendingResults');
             let analysisResults = null;
-            
             if (pendingResults) {
-                try {
-                    analysisResults = JSON.parse(pendingResults);
-                } catch (error) {
-                    console.error('Error parsing results:', error);
-                }
+                try { analysisResults = JSON.parse(pendingResults); } catch (error) { console.error(error); }
             }
-
-            // Prepare login data
-            const loginData = {
-                username: username,
-                password: password,
-                analysis_results: analysisResults
-            };
 
             try {
                 const response = await fetch(`${BACKEND_URL}/login`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(loginData)
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, analysis_results: analysisResults })
                 });
 
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    // Store auth token and user info
                     localStorage.setItem('authToken', data.token || 'temp_token');
                     localStorage.setItem('userId', data.user_id || username);
                     localStorage.setItem('username', data.username || username);
                     sessionStorage.setItem('loggedInUser', username);
-
-                    // Clear pending results
                     sessionStorage.removeItem('pendingResults');
 
-                    // Show success message
-                    successMessage.textContent = '✅ Login successful! Redirecting to dashboard...';
+                    successMessage.textContent = 'Login successful! Redirecting…';
                     successMessage.style.display = 'block';
-
-                    // Redirect to dashboard after 1.5 seconds
-                    setTimeout(() => {
-                        window.location.href = '/Dashboard.html';
-                    }, 1500);
-
+                    setTimeout(() => { window.location.href = '/Dashboard.html'; }, 1500);
                 } else {
-                    // Show error
-                    errorMessage.textContent = data.message || 'Incorrect username or password.';
+                    errorMessage.querySelector('p').textContent = data.message || 'Incorrect username or password.';
                     errorMessage.style.display = 'block';
-                    
-                    // Re-enable button
                     loginBtn.disabled = false;
-                    loginBtn.textContent = 'Login';
+                    loginBtn.textContent = 'Log in';
                 }
-
             } catch (error) {
                 console.error('Error during login:', error);
-                errorMessage.textContent = 'Network error. Please check if the backend server is running.';
+                errorMessage.querySelector('p').textContent = 'Network error. Is the server running?';
                 errorMessage.style.display = 'block';
-
-                // Re-enable button
                 loginBtn.disabled = false;
-                loginBtn.textContent = 'Login';
+                loginBtn.textContent = 'Log in';
             }
         });
     </script>

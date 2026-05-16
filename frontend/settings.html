@@ -3,140 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings - ColorMe</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
     <link rel="icon" type="image/x-icon" href="/images/color-wheel-guide-isolated-on-transparent-vector-48630416.webp">
-    <style>
-        input[type="text"],
-        input[type="password"],
-        input[type="email"] {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            display: inline-block;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-
-        label {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        button[type="submit"] {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        button[type="submit"]:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .back-link {
-            color: #764ba2;
-            text-decoration: none;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            background: rgba(118m 75, 162, 0.08);
-            border: 1px solid rgba(118, 75, 162, 0.2);
-            margin-top: 20px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .back-link:hover {
-            background: rgba(118, 75, 162, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .user-info-box {
-            background-color: rgba(255, 255, 255, 0.6);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            border: 1px solid rgba(0,0,0,0.1);
-        }
-
-        .user-info-box p {
-            margin: 5px 0;
-            font-size: 15px;
-        }
-
-        h3 {
-            color: #333;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-    </style>
+    <title>Settings — ColorMe</title>
 </head>
 <body class="center-login">
+    <div class="page-bg" aria-hidden="true"></div>
 
-    <div class="wrapper" style="height: auto; min-height: 45vh; background-color: bisque;">
-        <h1 style="margin-bottom: 25px;">Settings</h1>
+    <div class="auth-card">
+        <h1>Settings</h1>
+        <p class="auth-subtitle">Manage your account and password.</p>
+
         <div class="user-info-box">
-            <p><strong>Username:</strong> <span id="username-display">Loading...</span></p>
-            <p><strong>Email:</strong> <span id="email-display">Loading...</span></p>
+            <p><strong>Username:</strong> <span id="username-display">Loading…</span></p>
+            <p><strong>Email:</strong> <span id="email-display">Loading…</span></p>
         </div>
 
         <form id="password-form">
-            <h3>Change Password</h3>
-            <div>
-                <label for="old-password">Old Password</label>
-                <input type="password" id="old-password" name="oldPassword" required>
+            <div class="settings-section">
+                <h3>Change password</h3>
+                <div class="form-group">
+                    <label for="old-password">Current password</label>
+                    <input type="password" id="old-password" name="oldPassword" required autocomplete="current-password">
+                </div>
+                <div class="form-group">
+                    <label for="new-password">New password</label>
+                    <input type="password" id="new-password" name="newPassword" required autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm new password</label>
+                    <input type="password" id="confirm-password" name="confirmPassword" required autocomplete="new-password">
+                </div>
+                <button type="submit">Update password</button>
             </div>
-
-            <div>
-                <label for="new-password">New Password</label>
-                <input type="password" id="new-password" name="newPassword" required>
-            </div>
-
-            <div>
-                <label for="confirm-password">Confirm New Password</label>
-                <input type="password" id="confirm-password" name="confirmPassword" required>
-            </div>
-
-            <button type="submit">Update Password</button>
         </form>
-        
-        <p id="settings-message" style="margin-top: 15px; text-align: center; font-weight: bold; min-height: 20px;"></p>
 
-        <a href="Dashboard.html" class="back-link">← Back to Dashboard</a>
+        <p id="settings-message" style="margin-top: 1rem; text-align: center; font-weight: 600; min-height: 1.25rem;"></p>
+
+        <div class="links-container" style="border-top: none; padding-top: 0;">
+            <a href="Dashboard.html" class="home-link">Back to dashboard</a>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Checks if user is logged in
             const loggedInUser = sessionStorage.getItem('loggedInUser');
             const msgBox = document.getElementById('settings-message');
 
             if (!loggedInUser) {
-                // Brings user back to login page if not logged in
                 window.location.href = '/Login page.html';
                 return;
             }
 
-            // Asks server for user's info
             fetch('/get-user-info', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -144,15 +62,15 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Updates HTML via real data
                 if (data.username) {
                     document.getElementById('username-display').textContent = data.username;
                     document.getElementById('email-display').textContent = data.email;
                 } else {
                     document.getElementById('username-display').textContent = loggedInUser;
-                    document.getElementById('email-display').textContent = "Unknown (Error fetching data)";
+                    document.getElementById('email-display').textContent = 'Unable to load';
                 }
             });
+
             document.getElementById('password-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
 
@@ -160,12 +78,12 @@
                 const newPassword = document.getElementById('new-password').value;
                 const confirmPassword = document.getElementById('confirm-password').value;
 
-                msgBox.style.color = 'black';
-                msgBox.textContent= 'Updating...';
+                msgBox.style.color = 'var(--color-text-muted)';
+                msgBox.textContent = 'Updating…';
 
                 if (newPassword !== confirmPassword) {
-                    msgBox.style.color = 'red';
-                    msgBox.textContent = 'New passwords do not match!';
+                    msgBox.style.color = '#c44';
+                    msgBox.textContent = 'New passwords do not match.';
                     return;
                 }
 
@@ -173,29 +91,22 @@
                     const response = await fetch('/update-password', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            username: loggedInUser,
-                            oldPassword: oldPassword,
-                            newPassword: newPassword
-                        })
+                        body: JSON.stringify({ username: loggedInUser, oldPassword, newPassword })
                     });
-
                     const result = await response.json();
 
                     if (result.success) {
-                        msgBox.style.color = 'green';
-                        msgBox.textContent = 'Password changed successfully!';
-
+                        msgBox.style.color = '#4a8a5e';
+                        msgBox.textContent = 'Password updated successfully.';
                         document.getElementById('password-form').reset();
                     } else {
-                        msgBox.style.color = 'red';
+                        msgBox.style.color = '#c44';
                         msgBox.textContent = result.message || 'Failed to update password.';
                     }
-                
                 } catch (error) {
-                    console.error('Error:', error);
-                    msgBox.style.color = 'red';
-                    msgBox.textContent = 'An server error occurred.';
+                    console.error(error);
+                    msgBox.style.color = '#c44';
+                    msgBox.textContent = 'A server error occurred.';
                 }
             });
         });

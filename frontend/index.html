@@ -4,286 +4,90 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-  <title>ColorMe</title>
+  <title>ColorMe — Personal Color Analysis</title>
   <link rel="icon" type="image/x-icon" href="/images/color-wheel-guide-isolated-on-transparent-vector-48630416.webp">
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    canvas { display: none; }
-    
-    /* --- MAIN LAYOUT --- */
-    .content {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      flex-direction: column;
-      padding: 40px 20px;
-      text-align: center;
-      gap: 15px;
-    }
-
-    h1 {
-      margin-bottom: 5px;
-      font-size: 3rem;
-      color: #333;
-    }
-
-    /* --- AUTH BUTTONS --- */
-    #auth-section {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      margin-bottom: 10px;
-    }
-
-    /* --- UPLOAD BOX --- */
-    #drop {
-      background-color: #a1c4fd;
-      padding: 40px;
-      border-radius: 20px;
-      text-align: center;
-      width: 100%;
-      max-width: 500px;
-      box-sizing: border-box;
-      position: relative;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    }
-
-    /* --- BIG IMAGE PREVIEW --- */
-    .upload-box img {
-      max-width: 100%;
-      max-height: 600px;
-      width: auto;
-      height: auto;
-      border-radius: 15px;
-      margin-top: 20px;
-      cursor: crosshair;
-      object-fit: contain;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    /* --- COLOR CIRCLES --- */
-    .color-display {
-      display: none;
-      justify-content: center;
-      gap: 30px;
-      margin-top: 25px;
-      flex-wrap: wrap;
-    }
-    
-    .color-box {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      border: 4px solid white;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      transition: transform 0.2s;
-    }
-    
-    .color-box:hover { transform: scale(1.1); }
-    
-    #instructions {
-      text-align: center;
-      margin-top: 20px;
-      font-weight: 600;
-      color: #333;
-      font-size: 1.1rem;
-    }
-
-    /* --- BUTTON STYLES --- */
-    .btn-gradient {
-      padding: 12px 30px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-      text-decoration: none;
-      display: inline-block;
-      margin: 0 10px;
-    }
-
-    .btn-gradient:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    .btn-gradient:disabled {
-      background: linear-gradient(135deg, #ccc 0%, #999 100%);
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .btn-outline {
-      padding: 10px 20px;
-      background: white;
-      color: #667eea;
-      border: 2px solid #667eea;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      font-size: 15px;
-      margin: 0 5px;
-    }
-
-    .btn-outline:hover {
-      background: #667eea;
-      color: white;
-      transform: translateY(-2px);
-    }
-
-    .btn-danger {
-      padding: 10px 20px;
-      background: #ffebee;
-      color: #d32f2f;
-      border: 2px solid #ffcdd2;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 15px;
-      margin: 0 5px;
-    }
-
-    .btn-danger:hover {
-      background: #ffcdd2;
-      transform: translateY(-2px);
-    }
-    
-    .btn-result-action {
-      padding: 10px 25px;
-      background: rgba(255, 255, 255, 0.2); 
-      border: 2px solid rgba(255, 255, 255, 0.6);
-      color: white;
-      border-radius: 30px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(5px);
-      margin: 5px;
-    }
-
-    .btn-result-action:hover {
-      background: white;
-      color: #764ba2; 
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-
-    #analyze-btn {
-      margin-top: 30px;
-      font-size: 18px;
-      display: none;
-    }
-
-    #analysis-result {
-      margin-top: 30px;
-      font-weight: bold;
-      width: 100%;
-      max-width: 700px;
-    }
-    
-    #color-preview {
-      position: fixed; width: 80px; height: 80px; border: 4px solid white; border-radius: 50%; pointer-events: none; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 1000;
-    }
-    #color-info {
-      position: fixed; background: rgba(0, 0, 0, 0.9); color: white; padding: 10px 15px; border-radius: 8px; font-size: 14px; font-family: monospace; pointer-events: none; display: none; z-index: 1001; white-space: nowrap;
-    }
-    
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    } 
-  </style>
 </head>
 <body>
-  <div id="background"></div>
+  <div id="background" aria-hidden="true"></div>
 
-  <div class="content">
-    <h1>ColorMe</h1>
+  <header class="site-header">
+    <a href="/" class="site-logo">Color<span>Me</span></a>
+    <nav class="nav-actions" id="auth-section">
+      <div id="logged-out-nav" style="display: flex; gap: 0.5rem;">
+        <a href="/Login page.html" class="btn btn-ghost">Log in</a>
+        <a href="/signup.html" class="btn btn-primary">Sign up</a>
+      </div>
+      <div id="logged-in-nav" style="display: none; align-items: center; gap: 0.5rem;">
+        <span class="welcome-text">Hello, <strong id="welcome-message"></strong></span>
+        <a href="/Dashboard.html" class="btn btn-outline">Dashboard</a>
+        <button type="button" onclick="logout()" class="btn btn-danger">Logout</button>
+      </div>
+    </nav>
+  </header>
 
-    <div id="auth-section">
-      <div id="logged-out-nav" style="display: flex; justify-content: center; width: 100%;">
-        <a href="/Login page.html" class="btn-gradient">Login</a>
-        <a href="/signup.html" class="btn-gradient">Sign Up</a>
+  <main class="page-wrapper">
+    <div class="content">
+      <section class="hero">
+        <span class="hero-badge">AI Color Analysis</span>
+        <h1>Discover Your Seasonal Palette</h1>
+        <p>Upload a photo, sample your skin, hair, and eye colors, and get personalized styling recommendations.</p>
+      </section>
+
+      <div class="steps" aria-label="How it works">
+        <div class="step active"><span class="step-num">1</span> Upload</div>
+        <div class="step"><span class="step-num">2</span> Sample colors</div>
+        <div class="step"><span class="step-num">3</span> Analyze</div>
       </div>
 
-      <div id="logged-in-nav" style="display: none; flex-direction: column; align-items: center; gap: 10px; width: 100%;">
-        <h3 id="welcome-message" style="margin: 0; color: #333; font-weight: normal;"></h3>
-        <div style="display: flex; justify-content: center; gap: 10px;">
-            <a href="/Dashboard.html" class="btn-outline">Dashboard</a>
-            <button onclick="logout()" class="btn-danger">Logout</button>
+      <div class="upload-box card" id="drop">
+        <div class="upload-icon" aria-hidden="true">📷</div>
+        <h2>Upload a Photo</h2>
+        <p class="upload-hint">Use a clear, front-facing photo in natural light. Drag & drop or choose a file.</p>
+        <div class="file-input-wrap">
+          <label class="file-input-label" for="file">Choose photo</label>
+          <input id="file" type="file" accept="image/*">
         </div>
+
+        <div class="color-display" id="colors">
+          <div class="color-picker-item">
+            <p>Skin</p>
+            <div id="skin-color" class="color-box" style="background-color: #e8ddd4;" role="button" tabindex="0" aria-label="Select skin color"></div>
+          </div>
+          <div class="color-picker-item">
+            <p>Hair</p>
+            <div id="hair-color" class="color-box" style="background-color: #e8ddd4;" role="button" tabindex="0" aria-label="Select hair color"></div>
+          </div>
+          <div class="color-picker-item">
+            <p>Eyes</p>
+            <div id="eye-color" class="color-box" style="background-color: #e8ddd4;" role="button" tabindex="0" aria-label="Select eye color"></div>
+          </div>
+        </div>
+
+        <p id="instructions" class="text-subtle"></p>
       </div>
+
+      <button id="analyze-btn" class="btn btn-primary btn-lg" type="button">Analyze My Colors</button>
+      <div id="analysis-result"></div>
     </div>
+  </main>
 
-    <div class="upload-box" id="drop">
-      <h2>Upload a Photo</h2>
-      <p style="color: #555; margin-top: 10px;">Choose a file or drag & drop an image here</p>
-      <input id="file" type="file" accept="image/*" style="margin-top: 20px;">
-
-      <div class="color-display" id="colors">
-        <div style="text-align: center;">
-          <p style="margin-bottom: 8px; font-weight: bold;">Skin</p>
-          <div id="skin-color" class="color-box" style="background-color: #eee;"></div>
-        </div>
-        <div style="text-align: center;">
-          <p style="margin-bottom: 8px; font-weight: bold;">Hair</p>
-          <div id="hair-color" class="color-box" style="background-color: #eee;"></div>
-        </div>
-        <div style="text-align: center;">
-          <p style="margin-bottom: 8px; font-weight: bold;">Eyes</p>
-          <div id="eye-color" class="color-box" style="background-color: #eee;"></div>
-        </div>
-      </div>
-
-      <p id="instructions"></p>
-    </div>
-    
-    <button id="analyze-btn" class="btn-gradient">Analyze My Colors</button>
-    <div id="analysis-result"></div>
-  </div> 
-  
   <canvas id="canvas"></canvas>
-  <div id="color-preview"></div>
-  <div id="color-info"></div>
+  <div id="color-preview" aria-hidden="true"></div>
+  <div id="color-info" aria-hidden="true"></div>
 
   <script>
-    // --- HANDLE LOGIN DISPLAY ---
     document.addEventListener('DOMContentLoaded', () => {
       const loggedInUser = sessionStorage.getItem('loggedInUser');
-      
+      const loggedOutNav = document.getElementById('logged-out-nav');
+      const loggedInNav = document.getElementById('logged-in-nav');
+
       if (loggedInUser) {
-        document.getElementById('logged-in-nav').style.display = 'flex';
-        document.getElementById('logged-out-nav').style.display = 'none';
-        document.getElementById('welcome-message').textContent = `Welcome, ${loggedInUser}!`;
+        loggedInNav.style.display = 'flex';
+        loggedOutNav.style.display = 'none';
+        document.getElementById('welcome-message').textContent = loggedInUser;
       } else {
-        document.getElementById('logged-in-nav').style.display = 'none';
-        document.getElementById('logged-out-nav').style.display = 'flex';
+        loggedInNav.style.display = 'none';
+        loggedOutNav.style.display = 'flex';
       }
     });
 
@@ -292,30 +96,37 @@
       window.location.reload();
     }
 
-    // --- UPLOAD LOGIC ---
     const drop = document.getElementById('drop');
     const fileInput = document.getElementById('file');
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const instructions = document.getElementById('instructions');
     const colorsDiv = document.getElementById('colors');
-    const colorPreview = document.getElementById('color-preview');
-    const colorInfo = document.getElementById('color-info');
+    const steps = document.querySelectorAll('.step');
 
     let currentPick = null;
     let imgElement = null;
+    const DEFAULT_COLOR = 'rgb(232, 221, 212)';
 
-    ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => e.preventDefault()));
-    ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => e.preventDefault()));
+    function setStep(index) {
+      steps.forEach((s, i) => s.classList.toggle('active', i === index));
+    }
+
+    ['dragenter', 'dragover'].forEach(ev => {
+      drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('dragover'); });
+    });
+    ['dragleave', 'drop'].forEach(ev => {
+      drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('dragover'); });
+    });
 
     drop.addEventListener('drop', e => {
       const file = e.dataTransfer.files[0];
-      if(file) { fileInput.files = e.dataTransfer.files; showPreview(file); }
+      if (file) { fileInput.files = e.dataTransfer.files; showPreview(file); }
     });
 
     fileInput.addEventListener('change', e => {
       const file = e.target.files[0];
-      if(file) { showPreview(file); }
+      if (file) showPreview(file);
     });
 
     function showPreview(file) {
@@ -328,23 +139,25 @@
           ctx.drawImage(img, 0, 0);
 
           const old = document.getElementById('preview');
-          if(old) old.remove();
+          if (old) old.remove();
 
           const previewImg = document.createElement('img');
           previewImg.src = ev.target.result;
           previewImg.id = 'preview';
-          fileInput.insertAdjacentElement('afterend', previewImg);
+          previewImg.alt = 'Your uploaded photo — click to sample colors';
+          drop.appendChild(previewImg);
 
           imgElement = previewImg;
           imgElement.addEventListener('mousemove', updateCursor);
           imgElement.addEventListener('mouseleave', () => {
-             document.getElementById('color-preview').style.display = 'none';
-             document.getElementById('color-info').style.display = 'none';
+            document.getElementById('color-preview').style.display = 'none';
+            document.getElementById('color-info').style.display = 'none';
           });
           imgElement.addEventListener('click', pickColor);
 
           colorsDiv.style.display = 'flex';
-          instructions.textContent = 'Click a circle below (Skin, Hair, Eyes), then click the color on your photo.';
+          setStep(1);
+          instructions.textContent = 'Select Skin, Hair, or Eyes below, then click that area on your photo.';
         };
         img.src = ev.target.result;
       };
@@ -352,144 +165,147 @@
     }
 
     document.querySelectorAll('.color-box').forEach(box => {
-        box.addEventListener('click', () => {
-            currentPick = box.id.split('-')[0];
-            document.querySelectorAll('.color-box').forEach(b => b.style.border = '4px solid white');
-            box.style.border = '4px solid #667eea';
-            instructions.textContent = `Picking ${currentPick.toUpperCase()}... click on the photo!`;
-        });
+      box.addEventListener('click', () => {
+        currentPick = box.id.split('-')[0];
+        document.querySelectorAll('.color-box').forEach(b => b.classList.remove('selected'));
+        box.classList.add('selected');
+        instructions.textContent = `Sampling ${currentPick}… click the matching area on your photo.`;
+      });
+      box.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); box.click(); }
+      });
     });
 
     function updateCursor(e) {
-        if (!imgElement) return;
-        const rect = imgElement.getBoundingClientRect();
-        const scaleX = imgElement.naturalWidth / rect.width;
-        const scaleY = imgElement.naturalHeight / rect.height;
-        const pixel = ctx.getImageData((e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY, 1, 1).data;
-        const rgb = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
+      if (!imgElement) return;
+      const rect = imgElement.getBoundingClientRect();
+      const scaleX = imgElement.naturalWidth / rect.width;
+      const scaleY = imgElement.naturalHeight / rect.height;
+      const pixel = ctx.getImageData((e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY, 1, 1).data;
+      const rgb = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
 
-        const preview = document.getElementById('color-preview');
-        preview.style.display = 'block';
-        preview.style.backgroundColor = rgb;
-        preview.style.left = (e.clientX + 20) + 'px';
-        preview.style.top = (e.clientY - 40) + 'px';
-        
-        const info = document.getElementById('color-info');
-        info.style.display = 'block';
-        info.textContent = rgb;
-        info.style.left = (e.clientX + 110) + 'px';
-        info.style.top = (e.clientY - 40) + 'px';
+      const preview = document.getElementById('color-preview');
+      preview.style.display = 'block';
+      preview.style.backgroundColor = rgb;
+      preview.style.left = (e.clientX + 20) + 'px';
+      preview.style.top = (e.clientY - 40) + 'px';
+
+      const info = document.getElementById('color-info');
+      info.style.display = 'block';
+      info.textContent = rgb;
+      info.style.left = (e.clientX + 100) + 'px';
+      info.style.top = (e.clientY - 40) + 'px';
     }
 
     function pickColor(e) {
-        if(!currentPick) return;
-        const rect = imgElement.getBoundingClientRect();
-        const pixel = ctx.getImageData((e.clientX - rect.left) * (imgElement.naturalWidth / rect.width), (e.clientY - rect.top) * (imgElement.naturalHeight / rect.height), 1, 1).data;
-        const rgb = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
-        
-        const id = currentPick === 'eye' ? 'eye-color' : currentPick + '-color';
-        document.getElementById(id).style.backgroundColor = rgb;
-        document.getElementById(id).style.border = '4px solid white';
-        currentPick = null;
-        
-        const s = document.getElementById('skin-color').style.backgroundColor;
-        const h = document.getElementById('hair-color').style.backgroundColor;
-        const e_col = document.getElementById('eye-color').style.backgroundColor;
-        if(s && h && e_col && s !== 'rgb(238, 238, 238)') {
-            document.getElementById('analyze-btn').style.display = 'inline-block';
-        }
+      if (!currentPick) return;
+      const rect = imgElement.getBoundingClientRect();
+      const pixel = ctx.getImageData(
+        (e.clientX - rect.left) * (imgElement.naturalWidth / rect.width),
+        (e.clientY - rect.top) * (imgElement.naturalHeight / rect.height),
+        1, 1
+      ).data;
+      const rgb = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
+
+      const id = currentPick === 'eye' ? 'eye-color' : currentPick + '-color';
+      const el = document.getElementById(id);
+      el.style.backgroundColor = rgb;
+      el.classList.remove('selected');
+      currentPick = null;
+
+      const s = document.getElementById('skin-color').style.backgroundColor;
+      const h = document.getElementById('hair-color').style.backgroundColor;
+      const ey = document.getElementById('eye-color').style.backgroundColor;
+      if (s && h && ey && s !== DEFAULT_COLOR) {
+        document.getElementById('analyze-btn').style.display = 'inline-flex';
+        setStep(2);
+        instructions.textContent = 'All set! Tap Analyze to discover your seasonal palette.';
+      }
     }
 
-    // --- ANALYZE & SAVE ---
     document.getElementById('analyze-btn').addEventListener('click', async () => {
-        const btn = document.getElementById('analyze-btn');
-        btn.textContent = 'Analyzing...';
-        btn.disabled = true;
-        
-        try {
-            const response = await fetch('/analyze', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    skin: document.getElementById('skin-color').style.backgroundColor,
-                    hair: document.getElementById('hair-color').style.backgroundColor,
-                    eyes: document.getElementById('eye-color').style.backgroundColor
-                })
-            });
-            const result = await response.json();
-            
-            // Save locally for potential signup
-            sessionStorage.setItem('pendingResults', JSON.stringify({
-                season: result.season,
-                undertone: result.undertone,
-                message: result.message,
-                colors: { 
-                    skin: document.getElementById('skin-color').style.backgroundColor, 
-                    hair: document.getElementById('hair-color').style.backgroundColor, 
-                    eyes: document.getElementById('eye-color').style.backgroundColor 
-                },
-                timestamp: new Date().toISOString()
-            }));
-            
-            // Save to server if logged in
-            const user = sessionStorage.getItem('loggedInUser');
-            if (user) {
-                 await fetch('/user/save-result', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: user, result: result })
-                 });
-            }
+      const btn = document.getElementById('analyze-btn');
+      btn.textContent = 'Analyzing…';
+      btn.disabled = true;
 
-            // Show Results
-            document.getElementById('analysis-result').innerHTML = `
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(102, 126, 234, 0.25); animation: slideIn 0.5s ease-out;">
-                    <h2 style="margin: 0 0 20px 0; font-size: 28px;">✨ Your Result: ${result.season}</h2>
-                    
-                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-bottom: 15px;">
-                      <p style="font-size: 18px; margin: 0;"><strong>🎨 Undertone:</strong> ${result.undertone}</p>
-                    </div>
-                    
-                    <p style="font-size: 16px; margin-top: 15px; line-height: 1.6;">${result.message}</p>
+      try {
+        const response = await fetch('/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            skin: document.getElementById('skin-color').style.backgroundColor,
+            hair: document.getElementById('hair-color').style.backgroundColor,
+            eyes: document.getElementById('eye-color').style.backgroundColor
+          })
+        });
+        const result = await response.json();
 
-                    <div style="display: flex; gap: 15px; margin-top: 20px; justify-content: center;">
-                      <div style="text-align: center;">
-                        <p style="margin-bottom: 5px; font-size: 12px; opacity: 0.8;">Skin</p>
-                        <div style="width: 50px; height: 50px; background-color: ${document.getElementById('skin-color').style.backgroundColor}; border: 3px solid white; border-radius: 50%; margin: 0 auto;"></div>
-                      </div>
-                      <div style="text-align: center;">
-                        <p style="margin-bottom: 5px; font-size: 12px; opacity: 0.8;">Hair</p>
-                        <div style="width: 50px; height: 50px; background-color: ${document.getElementById('hair-color').style.backgroundColor}; border: 3px solid white; border-radius: 50%; margin: 0 auto;"></div>
-                      </div>
-                      <div style="text-align: center;">
-                        <p style="margin-bottom: 5px; font-size: 12px; opacity: 0.8;">Eyes</p>
-                        <div style="width: 50px; height: 50px; background-color: ${document.getElementById('eye-color').style.backgroundColor}; border: 3px solid white; border-radius: 50%; margin: 0 auto;"></div>
-                      </div>
-                    </div>
-                    
-                    <div id="save-actions" style="margin-top: 30px; display: ${user ? 'none' : 'flex'}; justify-content: center; gap: 15px; flex-wrap: wrap;">
-                        <button onclick="window.location.href='/signup.html'" class="btn-result-action">
-                            💾 Sign Up to Save Results
-                        </button>
-                        <button onclick="window.location.href='/Login-page.html?save=true'" class="btn-result-action">
-                            🔑 Log In to Save
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-        } catch (error) {
-            console.error('Error:', error);
-            document.getElementById('analysis-result').innerHTML = `
-                <div style="background-color: #ffebee; color: #333; padding: 20px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #c62828;">
-                    <p><strong>❌ Error:</strong> Unable to analyze colors.</p>
-                    <p style="opacity: 0.8;">${error.message}</p>
-                </div>
-            `;
-        } finally {
-            btn.textContent = 'Analyze My Colors';
-            btn.disabled = false;
+        sessionStorage.setItem('pendingResults', JSON.stringify({
+          season: result.season,
+          undertone: result.undertone,
+          message: result.message,
+          colors: {
+            skin: document.getElementById('skin-color').style.backgroundColor,
+            hair: document.getElementById('hair-color').style.backgroundColor,
+            eyes: document.getElementById('eye-color').style.backgroundColor
+          },
+          timestamp: new Date().toISOString()
+        }));
+
+        const user = sessionStorage.getItem('loggedInUser');
+        if (user) {
+          await fetch('/user/save-result', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: user, result: result })
+          });
         }
+
+        const skin = document.getElementById('skin-color').style.backgroundColor;
+        const hair = document.getElementById('hair-color').style.backgroundColor;
+        const eyes = document.getElementById('eye-color').style.backgroundColor;
+
+        document.getElementById('analysis-result').innerHTML = `
+          <div class="result-card">
+            <h2>Your Season: ${result.season}</h2>
+            <div class="result-meta">
+              <p><strong>Undertone:</strong> ${result.undertone}</p>
+            </div>
+            <p class="result-message">${result.message}</p>
+            <div class="result-swatches">
+              <div class="result-swatch">
+                <label>Skin</label>
+                <div class="swatch" style="background-color: ${skin}"></div>
+              </div>
+              <div class="result-swatch">
+                <label>Hair</label>
+                <div class="swatch" style="background-color: ${hair}"></div>
+              </div>
+              <div class="result-swatch">
+                <label>Eyes</label>
+                <div class="swatch" style="background-color: ${eyes}"></div>
+              </div>
+            </div>
+            <div class="result-actions" style="display: ${user ? 'none' : 'flex'};">
+              <a href="/signup.html" class="btn-result-action">Sign up to save</a>
+              <a href="/Login page.html?save=true" class="btn-result-action">Log in to save</a>
+            </div>
+          </div>
+        `;
+        document.getElementById('analysis-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('analysis-result').innerHTML = `
+          <div class="error-card">
+            <p><strong>Unable to analyze colors.</strong></p>
+            <p class="text-muted">${error.message}</p>
+          </div>
+        `;
+      } finally {
+        btn.textContent = 'Analyze My Colors';
+        btn.disabled = false;
+      }
     });
   </script>
 </body>
